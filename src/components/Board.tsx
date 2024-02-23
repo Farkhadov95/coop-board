@@ -2,7 +2,12 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
 
-const Board = () => {
+type BoardProp = {
+  currentSize: number;
+  currentColor: string;
+};
+
+const Board = ({ currentColor, currentSize }: BoardProp) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [socket, setSocket] =
     useState<Socket<DefaultEventsMap, DefaultEventsMap>>();
@@ -79,8 +84,8 @@ const Board = () => {
 
     // Set initial drawing styles
     if (ctx) {
-      ctx.strokeStyle = "black";
-      ctx.lineWidth = 5;
+      ctx.strokeStyle = currentColor;
+      ctx.lineWidth = currentSize;
 
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
@@ -103,9 +108,7 @@ const Board = () => {
   return (
     <canvas
       ref={canvasRef}
-      width={"800px"}
-      height={"600px"}
-      style={{ backgroundColor: "white" }}
+      style={{ backgroundColor: "white", width: "100%", height: "95vh" }}
     />
   );
 };
