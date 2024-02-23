@@ -111,9 +111,18 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
       console.log("works");
       const canvas = canvasRef.current;
       const ctx = canvas?.getContext("2d");
-      ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
+      setTimeout(() => {
+        ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
+
+        // Emit the cleared canvas data to other users
+        const dataURL = canvas?.toDataURL();
+        if (socket) {
+          socket.emit("canvasImage", dataURL);
+          console.log("Cleared board and emitted canvasImage");
+        }
+      }, 100);
     }
-  }, [clearBoardKey]);
+  }, [clearBoardKey, socket]);
 
   return (
     <canvas
