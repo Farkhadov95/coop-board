@@ -22,20 +22,21 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
   useEffect(() => {
     if (socket) {
       socket.on("canvasImage", (data) => {
-        // Create an image object from the data URL
         const image = new Image();
         image.src = data;
+
+        console.log("canvasImage");
 
         const canvas = canvasRef.current;
 
         const ctx = canvas?.getContext("2d");
-        // Draw the image onto the canvas
         image.onload = () => {
           ctx?.drawImage(image, 0, 0);
         };
       });
 
       socket.on("clearCanvas", () => {
+        console.log("clearCanvas");
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext("2d");
         ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
