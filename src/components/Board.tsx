@@ -21,7 +21,6 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
 
   useEffect(() => {
     if (socket) {
-      // Event listener for receiving canvas data from the socket
       socket.on("canvasImage", (data) => {
         // Create an image object from the data URL
         const image = new Image();
@@ -35,11 +34,16 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
           ctx?.drawImage(image, 0, 0);
         };
       });
+
+      socket.on("clearCanvas", () => {
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext("2d");
+        ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
+      });
     }
   }, [socket]);
 
   useEffect(() => {
-    // Variables to store drawing state
     let isDrawing = false;
     let lastX = 0;
     let lastY = 0;
@@ -50,7 +54,6 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
       [lastX, lastY] = [e.offsetX, e.offsetY];
     };
 
-    // Function to draw
     const draw = (e: { offsetX: number; offsetY: number }) => {
       if (!isDrawing) return;
 
@@ -66,13 +69,10 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
       [lastX, lastY] = [e.offsetX, e.offsetY];
     };
 
-    // Function to end drawing
     const endDrawing = () => {
       const canvas = canvasRef.current;
-      const dataURL = canvas?.toDataURL(); // Get the data URL of the canvas content
+      const dataURL = canvas?.toDataURL();
 
-      // Send the dataURL or image data to the socket
-      // console.log('drawing ended')
       if (socket) {
         socket.emit("canvasImage", dataURL);
         console.log("drawing ended");
@@ -83,7 +83,6 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
     const canvas: HTMLCanvasElement | null = canvasRef.current;
     const ctx = canvasRef.current?.getContext("2d");
 
-    // Set initial drawing styles
     if (ctx) {
       ctx.strokeStyle = currentColor;
       ctx.lineWidth = currentSize;
@@ -91,14 +90,13 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
     }
-    // Event listeners for drawing
+
     canvas?.addEventListener("mousedown", startDrawing);
     canvas?.addEventListener("mousemove", draw);
     canvas?.addEventListener("mouseup", endDrawing);
     canvas?.addEventListener("mouseout", endDrawing);
 
     return () => {
-      // Clean up event listeners when component unmounts
       canvas?.removeEventListener("mousedown", startDrawing);
       canvas?.removeEventListener("mousemove", draw);
       canvas?.removeEventListener("mouseup", endDrawing);
@@ -114,7 +112,6 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
       setTimeout(() => {
         ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
 
-        // Emit the cleared canvas data to other users
         const dataURL = canvas?.toDataURL();
         if (socket) {
           socket.emit("canvasImage", dataURL);
