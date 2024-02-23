@@ -108,6 +108,8 @@ const Board = ({ currentColor, currentSize }: BoardProp) => {
   return (
     <canvas
       ref={canvasRef}
+      width={window.innerWidth}
+      height={window.innerHeight}
       style={{ backgroundColor: "white", width: "100%", height: "95vh" }}
     />
   );
