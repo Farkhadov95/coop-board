@@ -5,9 +5,10 @@ import io, { Socket } from "socket.io-client";
 type BoardProp = {
   currentSize: number;
   currentColor: string;
+  clearBoardKey: number;
 };
 
-const Board = ({ currentColor, currentSize }: BoardProp) => {
+const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [socket, setSocket] =
     useState<Socket<DefaultEventsMap, DefaultEventsMap>>();
@@ -104,6 +105,15 @@ const Board = ({ currentColor, currentSize }: BoardProp) => {
       canvas?.removeEventListener("mouseout", endDrawing);
     };
   }, [currentColor, currentSize, socket]);
+
+  useEffect(() => {
+    if (clearBoardKey) {
+      console.log("works");
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext("2d");
+      ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
+    }
+  }, [clearBoardKey]);
 
   return (
     <canvas

@@ -6,6 +6,11 @@ import { useState } from "react";
 function App() {
   const [brushColor, setBrushColor] = useState("black");
   const [brushSize, setBrushSize] = useState<number>(5);
+  const [clearBoardKey, setClearBoardKey] = useState<number>(0);
+
+  const clearBoard = () => {
+    setClearBoardKey((prev) => prev + 1);
+  };
 
   return (
     <Box>
@@ -14,8 +19,13 @@ function App() {
         currentColor={brushColor}
         handleSize={setBrushSize}
         handleColor={setBrushColor}
+        clearBoard={clearBoard}
       />
-      <Board currentColor={brushColor} currentSize={brushSize} />
+      <Board
+        currentColor={brushColor}
+        currentSize={brushSize}
+        clearBoardKey={clearBoardKey}
+      />
     </Box>
   );
 }
