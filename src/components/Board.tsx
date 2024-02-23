@@ -103,7 +103,7 @@ const Board = ({ currentColor, currentSize }: BoardProp) => {
       canvas?.removeEventListener("mouseup", endDrawing);
       canvas?.removeEventListener("mouseout", endDrawing);
     };
-  }, [socket]);
+  }, [currentColor, currentSize, socket]);
 
   return (
     <canvas
