@@ -106,7 +106,10 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
 
   useEffect(() => {
     if (clearBoardKey) {
-      console.log("works");
+      if (socket) {
+        socket.emit("clearCanvas");
+      }
+
       const canvas = canvasRef.current;
       const ctx = canvas?.getContext("2d");
       setTimeout(() => {
