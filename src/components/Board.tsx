@@ -110,16 +110,18 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
         socket.emit("clearCanvas");
       }
 
-      const canvas: HTMLCanvasElement | null = canvasRef.current;
-      const ctx = canvasRef.current?.getContext("2d");
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext("2d");
 
       setTimeout(() => {
         ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
-        const dataURL = canvas?.toDataURL();
 
+        const dataURL = canvas?.toDataURL();
         if (socket) {
-          socket.emit("canvasImage", dataURL);
-          console.log("Cleared board and emitted canvasImage");
+          setTimeout(() => {
+            socket.emit("canvasImage", dataURL);
+            console.log("Cleared board and emitted canvasImage");
+          }, 100);
         }
       }, 100);
     }
