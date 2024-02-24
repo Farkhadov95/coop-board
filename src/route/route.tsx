@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Gallery from "../pages/Gallery";
-import Drawing from "../pages/Drawing";
+import BoardPage from "../pages/BoardPage";
 
 const router = createBrowserRouter([
   {
@@ -8,8 +8,8 @@ const router = createBrowserRouter([
     element: <Gallery />,
   },
   {
-    path: "/board",
-    element: <Drawing />,
+    path: "/board/:id",
+    element: <BoardPage />,
   },
 ]);
 

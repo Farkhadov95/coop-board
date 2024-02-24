@@ -1,14 +1,21 @@
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
+import { BoardType } from "../pages/Gallery";
 
 type BoardProp = {
   currentSize: number;
   currentColor: string;
   clearBoardKey: number;
+  boardData: BoardType | null;
 };
 
-const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
+const Board = ({
+  currentColor,
+  currentSize,
+  clearBoardKey,
+  boardData,
+}: BoardProp) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [socket, setSocket] =
     useState<Socket<DefaultEventsMap, DefaultEventsMap>>();
@@ -18,6 +25,25 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
     console.log(newSocket, "Connected to socket");
     setSocket(newSocket);
   }, []);
+
+  useEffect(() => {
+    if (boardData && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+
+      // Clear the canvas before drawing the new image
+      ctx?.clearRect(0, 0, canvas.width, canvas.height);
+
+      const image = new Image();
+      image.onload = () => {
+        // Draw the image on the canvas
+        ctx?.drawImage(image, 0, 0);
+      };
+
+      // Set the image source to the data URL
+      image.src = boardData.content;
+    }
+  }, [boardData]);
 
   useEffect(() => {
     if (socket) {
@@ -74,8 +100,8 @@ const Board = ({ currentColor, currentSize, clearBoardKey }: BoardProp) => {
       const canvas = canvasRef.current;
       const dataURL = canvas?.toDataURL();
 
-      if (socket) {
-        socket.emit("canvasImage", dataURL);
+      if (socket && boardData) {
+        socket.emit("canvasImage", { boardId: boardData._id, data: dataURL });
         console.log("drawing ended");
       }
       isDrawing = false;

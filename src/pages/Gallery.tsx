@@ -5,8 +5,8 @@ import { MdLibraryAdd } from "react-icons/md";
 import { FormEvent, useEffect, useState } from "react";
 import io from "socket.io-client";
 
-export type Board = {
-  id: string;
+export type BoardType = {
+  _id: string;
   title: string;
   content: string;
   updatedTime: string;
@@ -16,7 +16,7 @@ export type Board = {
 const socket = io("https://coop-board-server.adaptable.app");
 
 const Gallery = () => {
-  const [allBoards, setAllBoards] = useState<Board[]>([]);
+  const [allBoards, setAllBoards] = useState<BoardType[]>([]);
   const [title, setTitle] = useState<string>("");
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const Gallery = () => {
           marginTop={10}
         >
           {allBoards.map((board) => (
-            <GalleryItem key={board.id} board={board} />
+            <GalleryItem key={board._id} board={board} />
           ))}
         </Box>
       </Box>

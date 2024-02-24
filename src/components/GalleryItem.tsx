@@ -1,17 +1,17 @@
 import { Box, Text, IconButton, Image } from "@chakra-ui/react";
 import { RxCross1 } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
-import { Board } from "../pages/Gallery";
+import { BoardType } from "../pages/Gallery";
 
 type GalleryItemProps = {
-  board: Board;
+  board: BoardType;
 };
 
 const GalleryItem = ({ board }: GalleryItemProps) => {
   return (
     <Box
       as={NavLink}
-      to={"/board"}
+      to={`/board/${board._id}`}
       width={"200px"}
       height={"200px"}
       margin={"25px"}
