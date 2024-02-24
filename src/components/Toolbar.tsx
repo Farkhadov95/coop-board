@@ -1,6 +1,5 @@
 import {
   Box,
-  Heading,
   Input,
   Slider,
   SliderFilledTrack,
@@ -10,8 +9,8 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { VscClearAll } from "react-icons/vsc";
-import animationData from "../assets/paint-animation.json";
-import Lottie from "lottie-react";
+import Logo from "./Logo";
+import { NavLink } from "react-router-dom";
 
 type ToolsProp = {
   currentSize: number;
@@ -30,41 +29,14 @@ const Toolbar = ({
 }: ToolsProp) => {
   return (
     <Box
-      padding={2}
       display={"flex"}
       justifyContent={"space-between"}
       alignItems={"center"}
+      border={"2px solid teal"}
     >
-      <Box display={"flex"}>
-        <Box height={"80px"} width={"80px"}>
-          <Lottie animationData={animationData} />
-        </Box>
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          justifyContent={"center"}
-        >
-          <Heading
-            as={"h2"}
-            fontStyle={"italic"}
-            fontWeight={"bold"}
-            width={"fit-content"}
-            fontSize={"20px"}
-          >
-            Coop
-          </Heading>
-          <Heading
-            as={"h2"}
-            fontStyle={"italic"}
-            fontWeight={"bold"}
-            width={"fit-content"}
-            fontSize={"20px"}
-            paddingLeft={"10px"}
-          >
-            Board
-          </Heading>
-        </Box>
-      </Box>
+      <NavLink to={"/"}>
+        <Logo />
+      </NavLink>
       <Box display={"flex"} width={"40%"}>
         <Box display={"flex"} paddingRight={10} alignItems={"center"}>
           <Text paddingRight={2} fontWeight={"bold"} fontStyle={"italic"}>
