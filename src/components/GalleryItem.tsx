@@ -1,8 +1,13 @@
-import { Box, Text } from "@chakra-ui/react";
-import { FaRegImage } from "react-icons/fa6";
+import { Box, Text, IconButton, Image } from "@chakra-ui/react";
+import { RxCross1 } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
+import { Board } from "../pages/Gallery";
 
-const GalleryItem = () => {
+type GalleryItemProps = {
+  board: Board;
+};
+
+const GalleryItem = ({ board }: GalleryItemProps) => {
   return (
     <Box
       as={NavLink}
@@ -16,13 +21,38 @@ const GalleryItem = () => {
       display={"flex"}
       flexDirection={"column"}
       alignItems={"center"}
-      justifyContent={"center"}
+      justifyContent={"end"}
+      position={"relative"}
     >
-      <Box width={"100px"} marginX={"auto"}>
-        <FaRegImage size={"100"} color={"teal"} />
+      <IconButton
+        colorScheme="teal"
+        variant="ghost"
+        aria-label="Search database"
+        height={"40px"}
+        icon={<RxCross1 />}
+        position={"absolute"}
+        top={"0"}
+        right={"0"}
+      />
+      <Box
+        width={"90%"}
+        height={"100px"}
+        bgColor={"white"}
+        borderRadius={"10px"}
+        overflow={"hidden"}
+        marginX={5}
+        marginTop={2}
+        marginBottom={3}
+      >
+        <Image
+          width={"100%"}
+          height={"100%"}
+          src={board.content}
+          alt={board.title}
+        />
       </Box>
-      <Text fontWeight={"bold"} fontStyle={"italic"}>
-        Title
+      <Text fontWeight={"bold"} fontStyle={"italic"} marginBottom={5}>
+        {board.title}
       </Text>
     </Box>
   );

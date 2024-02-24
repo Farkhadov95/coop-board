@@ -2,8 +2,44 @@ import { Box, Button, Input, Text } from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import GalleryItem from "../components/GalleryItem";
 import { MdLibraryAdd } from "react-icons/md";
+import { FormEvent, useEffect, useState } from "react";
+import io from "socket.io-client";
+
+export type Board = {
+  id: string;
+  title: string;
+  content: string;
+  updatedTime: string;
+  createdTime: string;
+};
+
+const socket = io("https://coop-board-server.adaptable.app");
 
 const Gallery = () => {
+  const [allBoards, setAllBoards] = useState<Board[]>([]);
+  const [title, setTitle] = useState<string>("");
+
+  useEffect(() => {
+    socket.emit("getAllBoards");
+
+    socket.on("allBoards", (boards) => {
+      setAllBoards(boards);
+    });
+
+    return () => {
+      socket.off("allBoards");
+    };
+  }, []);
+
+  console.log(allBoards);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const newTitle = title;
+    socket.emit("createCanvas", { title: newTitle });
+    setTitle("");
+  };
+
   return (
     <Box>
       <Box border={"2px solid teal"}>
@@ -16,9 +52,21 @@ const Gallery = () => {
           width={"600px"}
           margin={"auto"}
           padding={10}
+          onSubmit={handleSubmit}
         >
-          <Input marginRight={3} border={"2px solid teal"} />
-          <Button width={"fit-content"} colorScheme="teal" variant="outline">
+          <Input
+            name="title"
+            marginRight={3}
+            border={"2px solid teal"}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <Button
+            width={"fit-content"}
+            colorScheme="teal"
+            variant="outline"
+            type="submit"
+          >
             <MdLibraryAdd size={"35"} />
             <Text marginLeft={1}>Create</Text>
           </Button>
@@ -30,13 +78,9 @@ const Gallery = () => {
           margin={"auto"}
           marginTop={10}
         >
-          <GalleryItem />
-          <GalleryItem />
-          <GalleryItem />
-          <GalleryItem />
-          <GalleryItem />
-          <GalleryItem />
-          <GalleryItem />
+          {allBoards.map((board) => (
+            <GalleryItem key={board.id} board={board} />
+          ))}
         </Box>
       </Box>
     </Box>
