@@ -129,7 +129,7 @@ const Board = ({
       canvas?.removeEventListener("mouseup", endDrawing);
       canvas?.removeEventListener("mouseout", endDrawing);
     };
-  }, [currentColor, currentSize, socket]);
+  }, [boardData, currentColor, currentSize, socket]);
 
   useEffect(() => {
     if (clearBoardKey) {

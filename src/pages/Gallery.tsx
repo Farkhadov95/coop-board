@@ -78,9 +78,12 @@ const Gallery = () => {
           margin={"auto"}
           marginTop={10}
         >
-          {allBoards.map((board) => (
-            <GalleryItem key={board._id} board={board} />
-          ))}
+          {allBoards
+            .slice()
+            .reverse()
+            .map((board) => (
+              <GalleryItem key={board._id} board={board} />
+            ))}
         </Box>
       </Box>
     </Box>
