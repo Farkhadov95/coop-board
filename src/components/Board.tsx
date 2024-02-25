@@ -56,12 +56,12 @@ const Board = ({
         };
       });
 
-      socket.on("clearCanvas", () => {
-        console.log("clearCanvas");
-        const canvas = canvasRef.current;
-        const ctx = canvas?.getContext("2d");
-        ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
-      });
+      // socket.on("clearCanvas", () => {
+      //   console.log("clearCanvas");
+      //   const canvas = canvasRef.current;
+      //   const ctx = canvas?.getContext("2d");
+      //   ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
+      // });
     }
   }, [socket]);
 
@@ -129,23 +129,24 @@ const Board = ({
   useEffect(() => {
     if (clearBoardKey) {
       if (socket) {
+        console.log(boardData?._id);
         socket.emit("clearCanvas", boardData?._id);
       }
 
-      const canvas: HTMLCanvasElement | null = canvasRef.current;
-      const ctx = canvasRef.current?.getContext("2d");
+      // const canvas: HTMLCanvasElement | null = canvasRef.current;
+      // const ctx = canvasRef.current?.getContext("2d");
 
-      setTimeout(() => {
-        ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
-        const dataURL = canvas?.toDataURL();
+      // setTimeout(() => {
+      //   ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
+      //   const dataURL = canvas?.toDataURL();
 
-        if (socket) {
-          socket.emit("canvasImage", dataURL);
-          console.log("Cleared board and emitted canvasImage");
-        }
-      }, 500);
+      //   if (socket) {
+      //     socket.emit("canvasImage", dataURL);
+      //     console.log("Cleared board and emitted canvasImage");
+      //   }
+      // }, 500);
     }
-  }, [boardData?._id, clearBoardKey, socket]);
+  }, [clearBoardKey, socket]);
 
   return (
     <canvas

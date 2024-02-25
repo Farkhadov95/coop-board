@@ -36,6 +36,24 @@ const Gallery = () => {
     };
   }, []);
 
+  useEffect(() => {
+    socket.on("clearCanvas", (boardId) => {
+      console.log("clearCanvas");
+      const updatedBoards = allBoards.map((board) => {
+        if (board._id === boardId) {
+          return { ...board, content: "" };
+        }
+        return board;
+      });
+
+      setAllBoards(updatedBoards);
+    });
+
+    return () => {
+      socket.off("clearCanvas");
+    };
+  }, [allBoards]);
+
   console.log(allBoards);
 
   const handleCreate = (e: FormEvent<HTMLFormElement>) => {
