@@ -129,7 +129,7 @@ const Board = ({
   useEffect(() => {
     if (clearBoardKey) {
       if (socket) {
-        socket.emit("clearCanvas");
+        socket.emit("clearCanvas", boardData?._id);
       }
 
       const canvas: HTMLCanvasElement | null = canvasRef.current;
@@ -145,7 +145,7 @@ const Board = ({
         }
       }, 500);
     }
-  }, [clearBoardKey, socket]);
+  }, [boardData?._id, clearBoardKey, socket]);
 
   return (
     <canvas
