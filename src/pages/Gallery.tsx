@@ -44,10 +44,10 @@ const Gallery = () => {
       setAllBoards(updatedBoards);
     });
 
-    socket.on("canvasDeleted", (deletedBoard) => {
+    socket.on("canvasDeleted", (deletedBoardId) => {
       console.log("canvasDeleted");
       setAllBoards((prevBoards) =>
-        prevBoards.filter((board) => board._id !== deletedBoard._id)
+        prevBoards.filter((board) => board._id !== deletedBoardId)
       );
     });
 
