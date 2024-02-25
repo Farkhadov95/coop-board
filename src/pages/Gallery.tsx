@@ -26,13 +26,8 @@ const Gallery = () => {
       setAllBoards(boards);
     });
 
-    socket.on("newCanvas", (createdBoard) => {
-      setAllBoards((prevBoards) => [...prevBoards, createdBoard]);
-    });
-
     return () => {
       socket.off("allBoards");
-      socket.off("newCanvas");
     };
   }, []);
 
@@ -56,9 +51,14 @@ const Gallery = () => {
       );
     });
 
+    socket.on("newCanvas", (createdBoard) => {
+      setAllBoards((prevBoards) => [...prevBoards, createdBoard]);
+    });
+
     return () => {
       socket.off("clearCanvas");
       socket.off("canvasDeleted");
+      socket.off("newCanvas");
     };
   }, [allBoards]);
 
@@ -117,22 +117,16 @@ const Gallery = () => {
           margin={"auto"}
           marginTop={10}
         >
-          {allBoards ? (
-            allBoards
-              .slice()
-              .reverse()
-              .map((board) => (
-                <GalleryItem
-                  key={board._id}
-                  board={board}
-                  onDelete={handleDeleteBoard}
-                />
-              ))
-          ) : (
-            <Text fontSize={"xx-large"} fontWeight={"bold"}>
-              No boards to display
-            </Text>
-          )}
+          {allBoards
+            .slice()
+            .reverse()
+            .map((board) => (
+              <GalleryItem
+                key={board._id}
+                board={board}
+                onDelete={handleDeleteBoard}
+              />
+            ))}
         </Box>
       </Box>
     </Box>
