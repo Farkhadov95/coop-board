@@ -42,28 +42,30 @@ const Board = ({
 
   useEffect(() => {
     if (socket) {
-      socket.on("canvasImage", (data) => {
+      socket.on("canvasImage", ({ boardId, data }) => {
         const image = new Image();
         image.src = data;
 
-        console.log("canvasImage");
-
-        const canvas = canvasRef.current;
-
-        const ctx = canvas?.getContext("2d");
-        image.onload = () => {
-          ctx?.drawImage(image, 0, 0);
-        };
+        if (boardData?._id === boardId) {
+          console.log("canvasImage");
+          const canvas = canvasRef.current;
+          const ctx = canvas?.getContext("2d");
+          image.onload = () => {
+            ctx?.drawImage(image, 0, 0);
+          };
+        }
       });
 
-      // socket.on("clearCanvas", () => {
-      //   console.log("clearCanvas");
-      //   const canvas = canvasRef.current;
-      //   const ctx = canvas?.getContext("2d");
-      //   ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
-      // });
+      socket.on("clearCanvas", (boardId) => {
+        if (boardData?._id === boardId) {
+          console.log("clearCanvas");
+          const canvas = canvasRef.current;
+          const ctx = canvas?.getContext("2d");
+          ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
+        }
+      });
     }
-  }, [socket]);
+  }, [boardData?._id, socket]);
 
   useEffect(() => {
     let isDrawing = false;
@@ -146,7 +148,7 @@ const Board = ({
       //   }
       // }, 500);
     }
-  }, [clearBoardKey, socket]);
+  }, [boardData?._id, clearBoardKey, socket]);
 
   return (
     <canvas

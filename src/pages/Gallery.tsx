@@ -109,16 +109,22 @@ const Gallery = () => {
           margin={"auto"}
           marginTop={10}
         >
-          {allBoards
-            .slice()
-            .reverse()
-            .map((board) => (
-              <GalleryItem
-                key={board._id}
-                board={board}
-                onDelete={handleDeleteBoard}
-              />
-            ))}
+          {allBoards ? (
+            allBoards
+              .slice()
+              .reverse()
+              .map((board) => (
+                <GalleryItem
+                  key={board._id}
+                  board={board}
+                  onDelete={handleDeleteBoard}
+                />
+              ))
+          ) : (
+            <Text fontSize={"xx-large"} fontWeight={"bold"}>
+              No boards to display
+            </Text>
+          )}
         </Box>
       </Box>
     </Box>
