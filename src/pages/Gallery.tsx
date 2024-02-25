@@ -30,6 +30,12 @@ const Gallery = () => {
       setAllBoards((prevBoards) => [...prevBoards, createdBoard]);
     });
 
+    socket.on("canvasDeleted", (deletedBoard) => {
+      setAllBoards((prevBoards) =>
+        prevBoards.filter((board) => board._id !== deletedBoard._id)
+      );
+    });
+
     return () => {
       socket.off("allBoards");
       socket.off("newCanvas");
@@ -64,7 +70,7 @@ const Gallery = () => {
   };
 
   const handleDeleteBoard = (boardId: string) => {
-    socket.emit("deleteCanvas", { boardId });
+    socket.emit("deleteCanvas", boardId);
 
     setAllBoards((prevBoards) =>
       prevBoards.filter((board) => board._id !== boardId)
