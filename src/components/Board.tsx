@@ -30,17 +30,12 @@ const Board = ({
     if (boardData && canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
-
-      // Clear the canvas before drawing the new image
       ctx?.clearRect(0, 0, canvas.width, canvas.height);
 
       const image = new Image();
       image.onload = () => {
-        // Draw the image on the canvas
         ctx?.drawImage(image, 0, 0);
       };
-
-      // Set the image source to the data URL
       image.src = boardData.content;
     }
   }, [boardData]);

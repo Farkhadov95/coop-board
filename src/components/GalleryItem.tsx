@@ -2,12 +2,19 @@ import { Box, Text, IconButton, Image } from "@chakra-ui/react";
 import { RxCross1 } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
 import { BoardType } from "../pages/Gallery";
+import { MouseEventHandler } from "react";
+import blankImg from "../assets/blank.png";
 
 type GalleryItemProps = {
   board: BoardType;
+  onDelete: (boardId: string) => void;
 };
 
-const GalleryItem = ({ board }: GalleryItemProps) => {
+const GalleryItem = ({ board, onDelete }: GalleryItemProps) => {
+  const handleDelete: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    onDelete(board._id);
+  };
   return (
     <Box
       as={NavLink}
@@ -27,12 +34,13 @@ const GalleryItem = ({ board }: GalleryItemProps) => {
       <IconButton
         colorScheme="teal"
         variant="ghost"
-        aria-label="Search database"
+        aria-label="Delete Item"
         height={"40px"}
         icon={<RxCross1 />}
         position={"absolute"}
         top={"0"}
         right={"0"}
+        onClick={handleDelete}
       />
       <Box
         width={"90%"}
@@ -47,7 +55,7 @@ const GalleryItem = ({ board }: GalleryItemProps) => {
         <Image
           width={"100%"}
           height={"100%"}
-          src={board.content}
+          src={board.content === "" ? blankImg : board.content}
           alt={board.title}
         />
       </Box>

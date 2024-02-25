@@ -26,18 +26,31 @@ const Gallery = () => {
       setAllBoards(boards);
     });
 
+    socket.on("newCanvas", (createdBoard) => {
+      setAllBoards((prevBoards) => [...prevBoards, createdBoard]);
+    });
+
     return () => {
       socket.off("allBoards");
+      socket.off("newCanvas");
     };
   }, []);
 
   console.log(allBoards);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleCreate = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newTitle = title;
     socket.emit("createCanvas", { title: newTitle });
     setTitle("");
+  };
+
+  const handleDeleteBoard = (boardId: string) => {
+    socket.emit("deleteCanvas", { boardId });
+
+    setAllBoards((prevBoards) =>
+      prevBoards.filter((board) => board._id !== boardId)
+    );
   };
 
   return (
@@ -52,7 +65,7 @@ const Gallery = () => {
           width={"600px"}
           margin={"auto"}
           padding={10}
-          onSubmit={handleSubmit}
+          onSubmit={handleCreate}
         >
           <Input
             name="title"
@@ -82,7 +95,11 @@ const Gallery = () => {
             .slice()
             .reverse()
             .map((board) => (
-              <GalleryItem key={board._id} board={board} />
+              <GalleryItem
+                key={board._id}
+                board={board}
+                onDelete={handleDeleteBoard}
+              />
             ))}
         </Box>
       </Box>
