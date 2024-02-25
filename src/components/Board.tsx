@@ -133,20 +133,11 @@ const Board = ({
       if (socket) {
         console.log(boardData?._id);
         socket.emit("clearCanvas", boardData?._id);
+
+        const canvas: HTMLCanvasElement | null = canvasRef.current;
+        const ctx = canvasRef.current?.getContext("2d");
+        ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
       }
-
-      // const canvas: HTMLCanvasElement | null = canvasRef.current;
-      // const ctx = canvasRef.current?.getContext("2d");
-
-      // setTimeout(() => {
-      //   ctx?.clearRect(0, 0, canvas!.width, canvas!.height);
-      //   const dataURL = canvas?.toDataURL();
-
-      //   if (socket) {
-      //     socket.emit("canvasImage", dataURL);
-      //     console.log("Cleared board and emitted canvasImage");
-      //   }
-      // }, 500);
     }
   }, [boardData?._id, clearBoardKey, socket]);
 
